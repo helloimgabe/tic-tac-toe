@@ -7,7 +7,7 @@ This project is a browser-based Tic-Tac-Toe game developed to demonstrate modula
 The application strictly adheres to the Separation of Concerns (SoC) principle by isolating functionality into single-instance modules, leveraging Immediately Invoked Function Expressions (IIFEs) to enforce a clean separation of roles:
     
     -Gameboard: Data storage of the 3×3 grid and basic cell modification.	
-    -Gamecontroller:	Logic control, managing turn order, defining players, and checking win/tie conditions.
+    -Gamecontroller: Logic control, managing turn order, defining players, and checking win/tie conditions.
     -DisplayController: UI/DOM manipulation, rendering the board, updating status messages, and managing user interaction.	
 
 ## Key Skills Demonstrated
