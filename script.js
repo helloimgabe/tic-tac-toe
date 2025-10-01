@@ -88,16 +88,17 @@ const Gamecontroller = (() => {
         playRound(row, col) {
             const marker = players[turnTracker - 1].marker;
 
-            //If a player selects an already taken tile, do not advance the turn. 
-            if (!Gameboard.placeMarker(row, col, marker)) {
-                return;
-            }
             //Checks if the playRound func received the correct amt of args.
             if (arguments.length != 2) {
                 console.log("Please provide a row number and a column number");
                 return;
             }
 
+            //If a player selects an already taken tile, do not advance the turn. 
+            if (!Gameboard.placeMarker(row, col, marker)) {
+                return;
+            }
+            
             const gameStatus = winOrTieChecker();
 
             if (gameStatus == "Tie") {
@@ -128,5 +129,5 @@ const Gamecontroller = (() => {
 })();
 
 const Displaycontroller = (() => {
-    
+
 })();
