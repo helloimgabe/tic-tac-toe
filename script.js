@@ -54,8 +54,6 @@ const Gamecontroller = (() => {
         [[0, 2], [1, 1], [2, 0]]
     ];
 
-    const players = [Gameboard.createPlayer("Player1", "X"), Gameboard.createPlayer("Player2", "O")];
-
     let turnTracker = 1;
 
     function winOrTieChecker() {
@@ -75,6 +73,7 @@ const Gamecontroller = (() => {
                 return val0;
             }
         }
+
         const fullBoardCheck = currentBoard.flat().every(cell => cell !== null);
 
         if (fullBoardCheck) {
@@ -85,6 +84,7 @@ const Gamecontroller = (() => {
     }
 
     return {
+
         playRound(row, col) {
             const marker = players[turnTracker - 1].marker;
 
@@ -98,12 +98,11 @@ const Gamecontroller = (() => {
             if (!Gameboard.placeMarker(row, col, marker)) {
                 return;
             }
-            
+
             const gameStatus = winOrTieChecker();
 
             if (gameStatus == "Tie") {
                 console.log("It's a tie!");
-                this.reset();
             }
 
             else if (gameStatus == false) {
@@ -113,8 +112,12 @@ const Gamecontroller = (() => {
             }
             else {
                 console.log(`${players[turnTracker - 1].name} wins!`)
-                this.reset();
             }
+        },
+        setupPlayers() {
+            let playerX = document.getElementById("playerX-name").value;
+            let playerO = document.getElementById("playerO-name").value;
+            players = [Gameboard.createPlayer(playerX, "X"), Gameboard.createPlayer(playerO, "O")];
         },
 
         getCurrentPlayer() {
@@ -124,10 +127,87 @@ const Gamecontroller = (() => {
         reset() {
             Gameboard.reset();
             turnTracker = 1;
+        },
+
+        getGameStatus() {
+            return winOrTieChecker();
         }
     }
 })();
 
 const Displaycontroller = (() => {
+    const displayStatus = document.querySelector(".gameStatus");
+    const boardTiles = document.querySelectorAll(".board-tiles");
+    const resetButton = document.querySelector(".reset");
+    const nameInput = document.querySelectorAll(".name-input")
+    const startButton = document.querySelector(".start");
 
+    function tileClick() {
+        const row = Number(this.dataset.row);
+        const col = Number(this.dataset.col);
+        Gamecontroller.playRound(row, col);
+        Displaycontroller.updateDisplay();
+    }
+
+    resetButton.addEventListener("click", () => {
+        boardTiles.forEach(boardTiles => {
+            boardTiles.textContent = "";
+        })
+        nameInput.forEach(nameInput => {
+            nameInput.value = "";
+        })
+        Displaycontroller.reset();
+    });
+
+    startButton.addEventListener("click", () => {
+        Displaycontroller.initializegame();
+    })
+
+    return {
+        initializegame() {
+            Gamecontroller.setupPlayers();
+            this.updateDisplay();
+            boardTiles.forEach(boardTiles => {
+                boardTiles.addEventListener("click", tileClick)
+            })
+            nameInput.forEach(nameInput => {
+                nameInput.disabled = true;
+            })
+            startButton.disabled = true;
+        },
+
+        updateDisplay() {
+            const currentBoard = Gameboard.getBoard();
+            for (let row = 0; row < currentBoard.length; row++) {
+                for (let col = 0; col < currentBoard.length; col++) {
+                    const tileLocation = document.querySelector(`[data-row = "${[row]}"][data-col="${[col]}"]`);
+                    tileLocation.textContent = currentBoard[row][col];
+                }
+            }
+            if (Gamecontroller.getGameStatus() == "Tie") {
+                displayStatus.textContent = "It's a tie!";
+                boardTiles.forEach(boardTiles => {
+                    boardTiles.removeEventListener("click", tileClick);
+                })
+            }
+            else if (Gamecontroller.getGameStatus() == false) {
+                displayStatus.textContent = `It is ${Gamecontroller.getCurrentPlayer().name}'s turn`;
+            }
+            else {
+                displayStatus.textContent = `The winner is ${Gamecontroller.getCurrentPlayer().name}!`;
+                boardTiles.forEach(boardTiles => {
+                    boardTiles.removeEventListener("click", tileClick);
+                })
+            }
+        },
+
+        reset() {
+            displayStatus.textContent = "";
+            nameInput.forEach(nameInput => {
+                nameInput.disabled = false;
+            })
+            startButton.disabled = false;
+            Gamecontroller.reset();
+        }
+    }
 })();
