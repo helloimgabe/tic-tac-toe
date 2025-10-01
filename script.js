@@ -1,4 +1,4 @@
-//Gameboard IIFE that stores the gameboard.
+//Module that stores the gameboard
 const Gameboard = (() => {
 
     const board = [
@@ -7,6 +7,7 @@ const Gameboard = (() => {
         [null, null, null]
     ];
 
+    //Public functions
     return {
         createPlayer(name, marker) {
             return {
@@ -37,7 +38,7 @@ const Gameboard = (() => {
     };
 })();
 
-//IIFE that controls flow of game logic
+//Module that controls flow of game logic
 const Gamecontroller = (() => {
 
     const winningConditions = [
@@ -53,8 +54,8 @@ const Gamecontroller = (() => {
         [[0, 0], [1, 1], [2, 2]],
         [[0, 2], [1, 1], [2, 0]]
     ];
-
-    let turnTracker = 1;
+    let players = [];
+    let turnTracker = 1; //Tracks whose turn it is. Initial value is 1 which indictates it is Player 1s turn.
 
     function winOrTieChecker() {
         let currentBoard = Gameboard.getBoard();
@@ -64,6 +65,7 @@ const Gamecontroller = (() => {
             const [r1, c1] = line[1];
             const [r2, c2] = line[2];
 
+            //Lookup the value of the cell's coordinates
             const val0 = currentBoard[r0][c0];
             const val1 = currentBoard[r1][c1];
             const val2 = currentBoard[r2][c2];
@@ -83,15 +85,15 @@ const Gamecontroller = (() => {
         return false;
     }
 
+    //Public functions
     return {
-
         playRound(row, col) {
             const marker = players[turnTracker - 1].marker;
 
             //Checks if the playRound func received the correct amt of args.
             if (arguments.length != 2) {
-                console.log("Please provide a row number and a column number");
-                return;
+                throw new Error("playRound received an invalid amount of args. Arg count must = 2");
+
             }
 
             //If a player selects an already taken tile, do not advance the turn. 
@@ -101,23 +103,19 @@ const Gamecontroller = (() => {
 
             const gameStatus = winOrTieChecker();
 
-            if (gameStatus == "Tie") {
-                console.log("It's a tie!");
-            }
-
-            else if (gameStatus == false) {
+            if (gameStatus == false) {
                 //Continue game, change turn
                 turnTracker = (turnTracker === 1) ? 2 : 1;
-                console.log(`${players[turnTracker - 1].name} is up next.`);
-            }
-            else {
-                console.log(`${players[turnTracker - 1].name} wins!`)
+
             }
         },
+
         setupPlayers() {
             let playerX = document.getElementById("playerX-name").value;
             let playerO = document.getElementById("playerO-name").value;
-            players = [Gameboard.createPlayer(playerX, "X"), Gameboard.createPlayer(playerO, "O")];
+            players = [Gameboard.createPlayer(playerX, "X"), 
+                Gameboard.createPlayer(playerO, "O")
+            ];
         },
 
         getCurrentPlayer() {
@@ -135,6 +133,7 @@ const Gamecontroller = (() => {
     }
 })();
 
+//Module that controls DOM manipulation 
 const Displaycontroller = (() => {
     const displayStatus = document.querySelector(".gameStatus");
     const boardTiles = document.querySelectorAll(".board-tiles");
@@ -142,6 +141,7 @@ const Displaycontroller = (() => {
     const nameInput = document.querySelectorAll(".name-input")
     const startButton = document.querySelector(".start");
 
+    //Gets data-attr from clicked tile and passes as args to playRound func
     function tileClick() {
         const row = Number(this.dataset.row);
         const col = Number(this.dataset.col);
@@ -149,6 +149,7 @@ const Displaycontroller = (() => {
         Displaycontroller.updateDisplay();
     }
 
+    //Clears the board's text content, input values, and re-enables start button & input
     resetButton.addEventListener("click", () => {
         boardTiles.forEach(boardTiles => {
             boardTiles.textContent = "";
@@ -162,7 +163,8 @@ const Displaycontroller = (() => {
     startButton.addEventListener("click", () => {
         Displaycontroller.initializegame();
     })
-
+    
+    //Public functions
     return {
         initializegame() {
             Gamecontroller.setupPlayers();
@@ -191,7 +193,7 @@ const Displaycontroller = (() => {
                 })
             }
             else if (Gamecontroller.getGameStatus() == false) {
-                displayStatus.textContent = `It is ${Gamecontroller.getCurrentPlayer().name}'s turn`;
+                displayStatus.textContent = `It's ${Gamecontroller.getCurrentPlayer().name}'s turn`;
             }
             else {
                 displayStatus.textContent = `The winner is ${Gamecontroller.getCurrentPlayer().name}!`;
