@@ -54,6 +54,7 @@ const Gamecontroller = (() => {
         [[0, 0], [1, 1], [2, 2]],
         [[0, 2], [1, 1], [2, 0]]
     ];
+    
     let players = [];
     let turnTracker = 1; //Tracks whose turn it is. Initial value is 1 which indictates it is Player 1s turn.
 
@@ -124,6 +125,7 @@ const Gamecontroller = (() => {
 
         reset() {
             Gameboard.reset();
+            players = [];
             turnTracker = 1;
         },
 
