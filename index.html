@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>Tic Tac Toe</header>
+        <div class="gameStatus"></div>
+
+        <main class="board-container">
+            <div class="gameboard">
+                <div class="board-tiles" id="tile1" data-row="0" data-col="0"></div>
+                <div class="board-tiles" id="tile2" data-row="0" data-col="1"></div>
+                <div class="board-tiles" id="tile3" data-row="0" data-col="2"></div>
+                <div class="board-tiles" id="tile4" data-row="1" data-col="0"></div>
+                <div class="board-tiles" id="tile5" data-row="1" data-col="1"></div>
+                <div class="board-tiles" id="tile6" data-row="1" data-col="2"></div>
+                <div class="board-tiles" id="tile7" data-row="2" data-col="0"></div>
+                <div class="board-tiles" id="tile8" data-row="2" data-col="1"></div>
+                <div class="board-tiles" id="tile9" data-row="2" data-col="2"></div>
+            </div>
+            <input class="name-input" type="text" id="playerX-name" placeholder="Enter Player X name">
+            <input class="name-input" type="text" id="playerO-name" placeholder="Enter Player O name">
+            <button class="start" type="button">Start</button>
+            <button class="reset" type="button">Reset</button>
+        </main>
+
+        <footer>
+            Made by <a href="https://github.com/helloimgabe">https://github.com/helloimgabe</a>
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
