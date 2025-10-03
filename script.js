@@ -54,7 +54,7 @@ const Gamecontroller = (() => {
         [[0, 0], [1, 1], [2, 2]],
         [[0, 2], [1, 1], [2, 0]]
     ];
-    
+
     let players = [];
     let turnTracker = 1; //Tracks whose turn it is. Initial value is 1 which indictates it is Player 1s turn.
 
@@ -62,25 +62,26 @@ const Gamecontroller = (() => {
         let currentBoard = Gameboard.getBoard();
 
         for (const line of winningConditions) {
-            const [r0, c0] = line[0];
-            const [r1, c1] = line[1];
-            const [r2, c2] = line[2];
+            const teamAtWinningCord = [];
 
-            //Lookup the value of the cell's coordinates
-            const val0 = currentBoard[r0][c0];
-            const val1 = currentBoard[r1][c1];
-            const val2 = currentBoard[r2][c2];
-
-            //Win check conditional
-            if ((val0 != null) && (val0 == val1) && (val1 == val2)) {
-                return val0;
+            // iterate through each line and get the team that's at the winning coordinate
+            for(let i = 0; i < line.length; ++i){
+                const [r, c] = line[i];
+                const val = currentBoard[r][c];
+                teamAtWinningCord.push(val); // store the team at the winning coordinate into the array
+            }
+            
+            // check if all the elements in the winning positons are the same, if so, then we must have a winner!
+            const isWinner = teamAtWinningCord.every(element => teamAtWinningCord[0] === element);
+            if (teamAtWinningCord[0] !== null && isWinner) { 
+                return teamAtWinningCord[0];
             }
         }
 
         const fullBoardCheck = currentBoard.flat().every(cell => cell !== null);
 
         if (fullBoardCheck) {
-            return "Tie"
+            return "Tie";
         }
 
         return false;
@@ -97,7 +98,7 @@ const Gamecontroller = (() => {
 
             }
 
-            //If a player selects an already taken tile, do not advance the turn. 
+            //If a player selects an already taken tile, do not advance the turn.
             if (!Gameboard.placeMarker(row, col, marker)) {
                 return;
             }
@@ -114,7 +115,7 @@ const Gamecontroller = (() => {
         setupPlayers() {
             let playerX = document.getElementById("playerX-name").value;
             let playerO = document.getElementById("playerO-name").value;
-            players = [Gameboard.createPlayer(playerX, "X"), 
+            players = [Gameboard.createPlayer(playerX, "X"),
                 Gameboard.createPlayer(playerO, "O")
             ];
         },
@@ -135,7 +136,7 @@ const Gamecontroller = (() => {
     }
 })();
 
-//Module that controls DOM manipulation 
+//Module that controls DOM manipulation
 const Displaycontroller = (() => {
     const displayStatus = document.querySelector(".gameStatus");
     const boardTiles = document.querySelectorAll(".board-tiles");
@@ -165,7 +166,7 @@ const Displaycontroller = (() => {
     startButton.addEventListener("click", () => {
         Displaycontroller.initializegame();
     })
-    
+
     //Public functions
     return {
         initializegame() {
@@ -214,4 +215,4 @@ const Displaycontroller = (() => {
             Gamecontroller.reset();
         }
     }
-})();
+})()
