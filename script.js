@@ -55,18 +55,19 @@ const Gamecontroller = (() => {
         [[0, 2], [1, 1], [2, 0]]
     ];
     
-    let players = [];
+    let players = []; //Stores the player information (name and marker)
     let turnTracker = 1; //Tracks whose turn it is. Initial value is 1 which indictates it is Player 1s turn.
 
     function winOrTieChecker() {
         let currentBoard = Gameboard.getBoard();
 
-        for (const line of winningConditions) {
-            const [r0, c0] = line[0];
-            const [r1, c1] = line[1];
-            const [r2, c2] = line[2];
+        for (const tile of winningConditions) {
+            //Destructure winningConditions array and assign values to const
+            const [r0, c0] = tile[0];
+            const [r1, c1] = tile[1];
+            const [r2, c2] = tile[2];
 
-            //Lookup the value of the cell's coordinates
+            //Use const vals to lookup the marker val of the tile's coordinates
             const val0 = currentBoard[r0][c0];
             const val1 = currentBoard[r1][c1];
             const val2 = currentBoard[r2][c2];
@@ -77,7 +78,8 @@ const Gamecontroller = (() => {
             }
         }
 
-        const fullBoardCheck = currentBoard.flat().every(cell => cell !== null);
+        //Checks to see if all tiles of the board have a value, indicating that the board is full.
+        const fullBoardCheck = currentBoard.flat().every(tile => tile !== null);
 
         if (fullBoardCheck) {
             return "Tie"
@@ -105,7 +107,7 @@ const Gamecontroller = (() => {
             const gameStatus = winOrTieChecker();
 
             if (gameStatus == false) {
-                //Continue game, change turn
+                //Continue the game and update the turnTracker's value to the next players turn
                 turnTracker = (turnTracker === 1) ? 2 : 1;
 
             }
