@@ -65,10 +65,10 @@ const Gamecontroller = (() => {
             const teamAtWinningCord = [];
 
             // iterate through each line and get the team that's at the winning coordinate
-            for(let i = 0; i < line.length; ++i){
-                const [r, c] = line[i];
-                const val = currentBoard[r][c];
-                teamAtWinningCord.push(val); // store the team at the winning coordinate into the array
+            for(const coordinate of line){
+                const [r, c] = coordinate;
+                const team = currentBoard[r][c];
+                teamAtWinningCord.push(team); // store the team at the winning coordinate into the array
             }
             
             // check if all the elements in the winning positons are the same, if so, then we must have a winner!
