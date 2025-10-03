@@ -78,7 +78,8 @@ const Gamecontroller = (() => {
             }
         }
 
-        const fullBoardCheck = currentBoard.flat().every(cell => cell !== null);
+        //Checks to see if all tiles of the board have a value, indicating that the board is full.
+        const fullBoardCheck = currentBoard.flat().every(tile => tile !== null);
 
         if (fullBoardCheck) {
             return "Tie";
@@ -106,7 +107,7 @@ const Gamecontroller = (() => {
             const gameStatus = winOrTieChecker();
 
             if (gameStatus == false) {
-                //Continue game, change turn
+                //Continue the game and update the turnTracker's value to the next players turn
                 turnTracker = (turnTracker === 1) ? 2 : 1;
 
             }
